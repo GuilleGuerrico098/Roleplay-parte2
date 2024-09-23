@@ -1,25 +1,53 @@
-﻿using Ucu.Poo.RoleplayGame;
+﻿namespace roleplay
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IPersonaje elfo = new Elfo("Link");
+            IPersonaje enano = new Enano("Darunia");
+            IPersonaje mago = new Mago("Zelda");
+            
+            Item espada = Item.MasterSword;
+            Item espadagrande = Item.EspadaBiggoron;
+            Item escudo = Item.EscudoHyliano;
+            Item botas = Item.BotasDeHierro;
+            Item tunica = Item.TunicaZora;
 
-SpellsBook book = new SpellsBook();
-book.Spells = new Spell[]{ new Spell() };
+            elfo.AgregarItem(espada);
+            elfo.AgregarItem(escudo);
 
-Wizard gandalf = new Wizard("Gandalf");
-gandalf.Staff = new Staff();
-gandalf.SpellsBook = book;
+            enano.AgregarItem(botas);
+            enano.AgregarItem(tunica);
 
-Dwarf gimli = new Dwarf("Gimli");
-gimli.Axe = new Axe();
-gimli.Helmet = new Helmet();
-gimli.Shield = new Shield();
+            mago.AgregarItem(tunica);
+            if (mago is Mago EsMago)
+            {
+                EsMago.AgregarHabilidad(Habilidades.Agi);
+                EsMago.AgregarHabilidad(Habilidades.Ziodyne);
+                EsMago.Estudio(20);
+            }
+            
+            Console.WriteLine("Ataques y habilidades:");
 
-Console.WriteLine($"Gimli has ❤️ {gimli.Health}");
-Console.WriteLine($"Gandalf attacks Gimli with ⚔️ {gandalf.AttackValue}");
+            int ataqueElfo = elfo.AtacarConItems(espada);
+            enano.Defender(ataqueElfo, elfo.Nombre);
+            
+            int ataqueEnano = enano.AtacarConItems(espadagrande);
+            mago.Defender(ataqueEnano, enano.Nombre);
 
-gimli.ReceiveAttack(gandalf.AttackValue);
-
-Console.WriteLine($"Gimli has ❤️ {gimli.Health}");
-
-gimli.Cure();
-
-Console.WriteLine($"Gimli has ❤️ {gimli.Health}");
-
+            Habilidades habilidades = Habilidades.Ziodyne;
+            int ataqueMago = 0;
+            if (mago is Mago EsBuenMago)
+            {
+                ataqueMago = EsBuenMago.AtacarConHabilidades(habilidades: habilidades);
+            }
+            elfo.Defender(ataqueMago, mago.Nombre);
+            if (elfo is Elfo ElfoGrande)
+            {
+                ElfoGrande.Curacion(30);
+            }
+            
+        }
+    }
+}
